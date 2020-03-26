@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>User Details</title>
+        <!--/*/ <th:block th:include="head :: head"/> /*/-->
+    </head>
+    <body id="samples">
+        <div th:replace="menu :: menu"></div>
+
+        <div id="content" class="container">
+
+            <div>
+                <h2>Profile Info for User: <span th:text="${#authentication.principal.fullName}">Joe Coder</span></h2>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Claim</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${details}">
+                    <td th:text="${item.key}">Key</td>
+                    <td th:id="${'claim-' + item.key}" th:text="${item.value}">Value</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
