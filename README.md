@@ -1,8 +1,8 @@
-# OAuth2 Logout Options with Spring Boot
+# OpenID Connect Logout Options with Spring Boot
   
 This repository contains an example Spring Boot application that is used to demonstrate the various logout options with Spring Security and OIDC. 
 
-Please read [OAuth2 Logout Options with Spring Boot][blog-post] to see how this app was created.
+Please read [OpenID Connect Logout Options with Spring Boot][blog-post] to see how this app was created.
 
 **Prerequisites:** 
 * [Java 8+](https://adoptopenjdk.net/)
