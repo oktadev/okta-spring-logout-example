@@ -31,7 +31,7 @@ public class LogoutExampleApplication {
 
         OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
             OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-            successHandler.setPostLogoutRedirectUri(URI.create("http://localhost:8081/"));
+            successHandler.setPostLogoutRedirectUri(URI.create("http://localhost:8080/"));
             return successHandler;
         }
 
