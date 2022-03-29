@@ -57,4 +57,4 @@ Please post any questions as comments on the example's [blog post][blog-post], o
 
 Apache 2.0, see [LICENSE](LICENSE).
 
-[blog-post]: http
+[blog-post]: https://developer.okta.com/blog/2020/03/27/spring-oidc-logout-options
