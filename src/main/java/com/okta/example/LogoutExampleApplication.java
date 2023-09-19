@@ -3,17 +3,19 @@ package com.okta.example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.net.URI;
 import java.util.Collections;
 
 @SpringBootApplication
@@ -24,35 +26,39 @@ public class LogoutExampleApplication {
     }
 
     @Configuration
-    static class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @EnableWebSecurity
+    static class SecurityConfig {
 
         @Autowired
         ClientRegistrationRepository clientRegistrationRepository;
 
         OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
             OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-            successHandler.setPostLogoutRedirectUri(URI.create("http://localhost:8081/"));
+            successHandler.setPostLogoutRedirectUri("http://localhost:8080/");
             return successHandler;
         }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
+        @Bean
+        public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeHttpRequests(authorize -> authorize
+                            // allow anonymous access to the root page
+                            .requestMatchers("/").permitAll()
 
-                    // allow anonymous access to the root page
-                    .antMatchers("/").permitAll()
+                            // all other requests
+                            .anyRequest().authenticated()
+                    )
+                    .logout(logout -> logout
+                            // After we logout, redirect to root page, by default Spring will send you to /login?logout
+                            .logoutSuccessUrl("/")
 
-                    // all other requests
-                    .anyRequest().authenticated()
-
-                    // After we logout, redirect to root page, by default Spring will send you to /login?logout
-                    .and().logout().logoutSuccessUrl("/")
-
-                    // RP-initiated logout
-                    .and().logout().logoutSuccessHandler(oidcLogoutSuccessHandler())
-
+                            // RP-initiated logout
+                            .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                    )
                     // enable OAuth2/OIDC
-                    .and().oauth2Login();
+                    .oauth2Login(Customizer.withDefaults());
+
+            return http.build();
         }
     }
 
