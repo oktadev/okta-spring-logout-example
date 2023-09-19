@@ -5,7 +5,7 @@ This repository contains an example Spring Boot application that is used to demo
 Please read [OpenID Connect Logout Options with Spring Boot][blog-post] to see how this app was created.
 
 **Prerequisites:** 
-* [Java 8+](https://adoptopenjdk.net/)
+* [Java 17+](https://adoptium.net/)
 
 > [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage, and secure users and roles in any application.
 
